@@ -1,18 +1,22 @@
-FROM node:20-alpine
+# Usa una imagen oficial de Node
+FROM node:20
 
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
+# Copia primero package.json y package-lock.json (si existe)
 COPY package*.json ./
 
-RUN apk add --no-cache curl && \
-    npm install --production
+# Instala las dependencias dentro del contenedor
+RUN npm install
 
+# Copia el resto del código de la app
 COPY . .
 
+# Expone el puerto que tu app usa (ajústalo si tu app usa otro)
 EXPOSE 3000
 
-CMD ["node", "app.js"]
+# Comando para ejecutar la app
+CMD [ "node", "app.js" ]
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
 
