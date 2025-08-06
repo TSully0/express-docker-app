@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Arte Virtual</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .artwork-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .artwork-card:hover {
+            transform: translateY(-5px);
+        }
+        .artwork-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        .artwork-info {
+            padding: 15px;
+        }
+        .artwork-info h3 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+        .artwork-info p {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .artwork-info .description {
+            font-style: italic;
+            font-size: 0.85em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenido a la Galería de Arte</h1>
+    <div id="gallery-container" class="gallery-container">
+        Cargando obras de arte...
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const galleryContainer = document.getElementById('gallery-container');
+            galleryContainer.innerHTML = 'Cargando obras de arte...';
+            try {
+                const response = await fetch('/api/artworks');
+                const artworks = await response.json();
+                galleryContainer.innerHTML = '';
+
+                if (artworks.length === 0) {
+                    galleryContainer.innerHTML = '<p>No hay obras de arte para mostrar.</p>';
+                    return;
+                }
+
+                artworks.forEach(artwork => {
+                    const card = document.createElement('div');
+                    card.classList.add('artwork-card');
+
+                    card.innerHTML = `
+                        <img src="${artwork.imageUrl}" alt="${artwork.title}">
+                        <div class="artwork-info">
+                            <h3>${artwork.title}</h3>
+                            <p><strong>Artista:</strong> ${artwork.artist}</p>
+                            <p><strong>Año:</strong> ${artwork.year}</p>
+                            <p><strong>Técnica:</strong> ${artwork.technique}</p>
+                            ${artwork.dimensions ? `<p><strong>Dimensiones:</strong> ${artwork.dimensions}</p>` : ''}
+                            ${artwork.genre ? `<p><strong>Género:</strong> ${artwork.genre}</p>` : ''}
+                            <p class="description">${artwork.description}</p>
+                        </div>
+                    `;
+                    galleryContainer.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error al cargar las obras de arte:', error);
+                galleryContainer.innerHTML = '<p>Error al cargar las obras de arte. Inténtalo de nuevo más tarde.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
