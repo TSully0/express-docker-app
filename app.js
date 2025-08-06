@@ -31,15 +31,15 @@ async function connectWithRetry() {
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
       await client.connect();
-      console.log('✅ Conectado exitosamente a MongoDB');
+      console.log('Conectado exitosamente a MongoDB');
       return;
     } catch (err) {
-      console.error(`❌ Intento ${i + 1} de ${MAX_RETRIES}:`, err.message);
+      console.error(`Intento ${i + 1} de ${MAX_RETRIES}:`, err.message);
       if (i < MAX_RETRIES - 1) {
-        console.log(`🔄 Reintentando en ${RETRY_DELAY_MS / 1000} segundos...`);
+        console.log(`Reintentando en ${RETRY_DELAY_MS / 1000} segundos...`);
         await new Promise(res => setTimeout(res, RETRY_DELAY_MS));
       } else {
-        console.error('🚫 Número máximo de reintentos alcanzado. Cerrando aplicación.');
+        console.error('Número máximo de reintentos alcanzado. Cerrando aplicación.');
         process.exit(1);
       }
     }
@@ -88,8 +88,8 @@ async function startApp() {
 
   const hostIp = getLocalIpAddress();
   app.listen(3000, '0.0.0.0', () => {
-    console.log(`🔧 Panel de administración: http://${hostIp}:${port}/admin`);
-    console.log(`🖼 Galería de arte: http://${hostIp}:${port}/gallery`);
+    console.log(`Panel de administración: http://${hostIp}:${port}/admin`);
+    console.log(`Galería de arte: http://${hostIp}:${port}/gallery`);
   });
 }
 
