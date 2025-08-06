@@ -9,9 +9,9 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
+console.log(`📡 Conectando a MongoDB en: ${mongoUrl}`);
 const client = new MongoClient(mongoUrl);
 
-// ✅ Función segura para obtener IP local
 function getLocalIpAddress() {
   const interfaces = os.networkInterfaces();
   for (const interfaceName in interfaces) {
@@ -54,7 +54,6 @@ async function startApp() {
   const db = client.db(dbName);
   const collection = db.collection('artworks');
 
-  // 🎨 API para obtener obras
   app.get('/api/artworks', async (req, res) => {
     try {
       const artworks = await collection.find({}).toArray();
@@ -65,7 +64,6 @@ async function startApp() {
     }
   });
 
-  // 🖼 API para insertar obras
   app.post('/api/artworks', async (req, res) => {
     try {
       const newArtwork = req.body;
@@ -81,7 +79,6 @@ async function startApp() {
     }
   });
 
-  // 🌐 Rutas estáticas
   app.get('/gallery', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
@@ -90,7 +87,6 @@ async function startApp() {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
   });
 
-  // 🚀 Iniciar servidor
   const hostIp = getLocalIpAddress();
   app.listen(3000, '0.0.0.0', () => {
     console.log(`🔧 Panel de administración: http://${hostIp}:${port}/admin`);
@@ -98,5 +94,11 @@ async function startApp() {
   });
 }
 
-startApp().catch(console.error);
+// 🚦 Cerrar conexión limpia
+process.on('SIGINT', async () => {
+  await client.close();
+  console.log('🛑 Conexión a MongoDB cerrada');
+  process.exit(0);
+});
 
+startApp().catch(console.error);
