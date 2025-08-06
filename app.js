@@ -88,7 +88,7 @@ async function startApp() {
       res.sendFile(__dirname + '/public/admin.html');
 });
 
-const hostIp = getLocalIpAddress();
+const hostIp = 'localhost';
 app.listen(port, '0.0.0.0', () => {
     console.log(`Panel de administración disponible en http://${hostIp}:${port}/admin`);
     console.log(`Galería de arte en http://${hostIp}:${port}/gallery`);
