@@ -9,7 +9,6 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
-console.log(`📡 Conectando a MongoDB en: ${mongoUrl}`);
 const client = new MongoClient(mongoUrl);
 
 function getLocalIpAddress() {
@@ -93,12 +92,5 @@ async function startApp() {
     console.log(`🖼 Galería de arte: http://${hostIp}:${port}/gallery`);
   });
 }
-
-// 🚦 Cerrar conexión limpia
-process.on('SIGINT', async () => {
-  await client.close();
-  console.log('🛑 Conexión a MongoDB cerrada');
-  process.exit(0);
-});
 
 startApp().catch(console.error);
