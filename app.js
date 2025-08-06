@@ -92,7 +92,7 @@ async function startApp() {
 
   // 🚀 Iniciar servidor
   const hostIp = getLocalIpAddress();
-  app.listen(port, '0.0.0.0', () => {
+  app.listen(3000, '0.0.0.0', () => {
     console.log(`🔧 Panel de administración: http://${hostIp}:${port}/admin`);
     console.log(`🖼 Galería de arte: http://${hostIp}:${port}/gallery`);
   });
