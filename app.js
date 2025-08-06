@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
-const mongoUrl = process.env.MONGO_URL || 'mongodb://mongo-db:27017/mydatabase';
+const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
 const client = new MongoClient(mongoUrl);
 
 // ✅ Función segura para obtener IP local
