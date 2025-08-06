@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración de la Galería</title>
+</head>
+<body>
+    <h1>Añadir Nueva Obra de Arte</h1>
+    <form id="artwork-form">
+        <label for="tittle">Título:</label><br>
+        <input type="text" id="tittle" name="tittle" required><br><br>
+
+        <label for="artist">Artista:</label><br>
+        <input type="text" id="artist" name="artist" required><br><br>
+
+        <label for="year">Año:</label><br>
+        <input type="number" id="year" name="yaer"><br><br>
+
+        <label for="imageUrl">URL de la Imagen:</label><br>
+        <input type="text" id="imageUrl" name="imageUrl" required><br><br>
+
+        <label for="technique">Técnica:</label><br>
+        <input type="text" id="technique" name="technique"><br><br>
+
+        <label for="dimensions">Dimensiones:</label><br>
+        <input type="text" id="dimensions" name="dimensions"><br><br>
+
+        <label for="genre">Género:</label><br>
+        <input type="text" id="genre" name="genre"><br><br>
+
+        <button type="submit">Añadir Obra de Arte</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('artwork-form').addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+
+            const formData = new FormData(event.target);
+            const artworkData = {};
+            formData.forEach((value, key) => {
+                artworkData[key] = value;
+            });
+
+            try {
+                const response = await fetch('/api/artworks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(artworkData)
+                });
+
+                const result = await response.json();
+                const messageDiv = document.getElementById('message');
+                if (response.ok) {
+                    messageDiv.textContent = '¡Obra de arte añadida con éxito!';
+                    messageDiv.style.color = 'green';
+                    event.target.reset(); // Limpia el formulario
+                } else {
+                    messageDiv.textContent = `Error: ${result.message || 'No se pudo añadir la obra de arte.'}`;
+                    messageDiv.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                document.getElementById('message').textContent = 'Error de conexión con el servidor.';
+                document.getElementById('message').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
