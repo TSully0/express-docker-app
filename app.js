@@ -88,12 +88,11 @@ async function startApp() {
   app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
   });
-
+  
 const hostIp = getPreferredIp();
 app.listen(port, '0.0.0.0', () => {
   console.log(`Panel de administración disponible en http://${hostIp}:${port}/admin`);
   console.log(`Galería de arte en http://${hostIp}:${port}/gallery`);
-});
 });
 
 startApp().catch(console.error);
