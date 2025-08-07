@@ -11,23 +11,20 @@ app.use(express.static('public'));
 const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
 const client = new MongoClient(mongoUrl);
 
-function getAllLocalIps() {
+function getPreferredIp() {
   const interfaces = os.networkInterfaces();
-  const ips = [];
-
   for (const name in interfaces) {
     for (const iface of interfaces[name]) {
       if (
         iface.family === 'IPv4' &&
         !iface.internal &&
-        !iface.address.startsWith('172.') // evita IPs internas de Docker
+        (iface.address.startsWith('192.168.') || iface.address.startsWith('10.'))
       ) {
-        ips.push(iface.address);
+        return iface.address;
       }
     }
   }
-
-  return ips.length > 0 ? ips : ['localhost'];
+  return 'localhost';
 }
 
 const MAX_RETRIES = 10;
