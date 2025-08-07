@@ -12,17 +12,7 @@ const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
 const client = new MongoClient(mongoUrl);
 
 function getPrimaryLocalIp() {
-  const interfaces = os.networkInterfaces();
-
-  for (const name in interfaces) {
-    for (const iface of interfaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        return iface.address; // Solo una IP válida
-      }
-    }
-  }
-
-  return 'localhost'; // Fallback
+  return 'localhost'; 
 }
 
 const MAX_RETRIES = 10;
@@ -89,7 +79,6 @@ async function startApp() {
 
   app.listen(port, '0.0.0.0', () => {
     const ip = getPrimaryLocalIp();
-    console.log(`Servidor iniciado en el puerto ${port}`);
     console.log(`Panel de administración: http://${ip}:${port}/admin`);
     console.log(`Galería de arte: http://${ip}:${port}/gallery`);
   });
