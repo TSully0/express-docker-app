@@ -11,19 +11,18 @@ app.use(express.static('public'));
 const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
 const client = new MongoClient(mongoUrl);
 
-function getAllLocalIps() {
-    const interfaces = os.networkInterfaces();
-    const ips = ['localhost'];
+function getPrimaryLocalIp() {
+  const interfaces = os.networkInterfaces();
 
-    for (const name in interfaces) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                ips.push(iface.address);
-            }
-        }
+  for (const name in interfaces) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address; // Solo una IP válida
+      }
     }
+  }
 
-    return ips;
+  return 'localhost'; // Fallback
 }
 
 const MAX_RETRIES = 10;
@@ -87,14 +86,13 @@ async function startApp() {
   app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
   });
-  
-app.listen(port, '0.0.0.0', () => {
-  const ips = getAllLocalIps();
-  console.log(`Servidor iniciado en el puerto ${port}`);
-  ips.forEach(ip => {
+
+  app.listen(port, '0.0.0.0', () => {
+    const ip = getPrimaryLocalIp();
+    console.log(`Servidor iniciado en el puerto ${port}`);
     console.log(`Panel de administración: http://${ip}:${port}/admin`);
     console.log(`Galería de arte: http://${ip}:${port}/gallery`);
   });
-});
+}
 
 startApp().catch(console.error);
