@@ -18,7 +18,11 @@ function getPreferredIp() {
       if (
         iface.family === 'IPv4' &&
         !iface.internal &&
-        (iface.address.startsWith('192.168.') || iface.address.startsWith('10.'))
+        (
+          iface.address.startsWith('192.168.') ||
+          iface.address.startsWith('10.') ||
+          iface.address.startsWith('172.')
+        )
       ) {
         return iface.address;
       }
@@ -90,7 +94,7 @@ async function startApp() {
   });
   
 const hostIp = getPreferredIp();
-app.listen(port, '0.0.0.0', () => {
+app.listen(3000, '0.0.0.0', () => {
   console.log(`Panel de administración disponible en http://${hostIp}:${port}/admin`);
   console.log(`Galería de arte en http://${hostIp}:${port}/gallery`);
 });
