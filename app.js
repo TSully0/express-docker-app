@@ -92,8 +92,8 @@ app.listen(port, () => {
     const ips = getAllLocalIps();
     console.log(`Servidor iniciado en el puerto ${port}`);
     ips.forEach(ip => {
-      console.log(`🔐 Panel de administración: http://${ip}:${port}/admin`);
-      console.log(`🖼️ Galería de arte: http://${ip}:${port}/gallery`);
+      console.log(`Panel de administración: http://${ip}:${port}/admin`);
+      console.log(`Galería de arte: http://${ip}:${port}/gallery`);
     });
   });
 }
