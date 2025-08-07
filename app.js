@@ -11,10 +11,6 @@ app.use(express.static('public'));
 const mongoUrl = process.env.MONGO_URL || 'mongodb://mongodb:27017/mydatabase';
 const client = new MongoClient(mongoUrl);
 
-function getLocalIpAddress() {
-  const interfaces = os.networkInterfaces();
-  const validIps = [];
-
 function getAllLocalIps() {
   const interfaces = os.networkInterfaces();
   const ips = [];
@@ -33,8 +29,6 @@ function getAllLocalIps() {
 
   return ips.length > 0 ? ips : ['localhost'];
 }
-
-
 
 const MAX_RETRIES = 10;
 const RETRY_DELAY_MS = 5000;
