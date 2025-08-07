@@ -16,7 +16,11 @@ function getLocalIpAddress() {
   for (const interfaceName in interfaces) {
     const iface = interfaces[interfaceName];
     for (const alias of iface) {
-      if (alias.family === 'IPv4' && !iface.internal && !iface.address.startsWith('172.')) {
+      if (
+        alias.family === 'IPv4' &&
+        !alias.internal &&
+        !alias.address.startsWith('172.') 
+      ) {
         return alias.address;
       }
     }
